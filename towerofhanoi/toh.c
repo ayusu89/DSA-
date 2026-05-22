@@ -1,22 +1,21 @@
 #include<stdio.h>
-void toh(int n , char source , char dest , char aux);
-int main()
+void toh (int n , char source , char dest , char aux)
+{
+    if (n==1)
+    {
+        printf("Move 1 disk from %c to %c \n",source , dest);
+        return ;  
+    }
+    toh(n-1 , source , aux , dest);
+    printf("Move %d disks from %c to %c \n" , n , source , dest);
+
+    toh(n-1 , aux , dest , source);
+}
+int main ()
 {
     int n;
-    printf("Enter the number of disks : ");
+    printf("Enter the number of disks : \n");
     scanf("%d",&n);
-    printf("The sequence of moves involved in the Tower of Hanoi are : \n");
-    toh(n,'A','C','B');
+    toh(n , 'A' , 'C' , 'B'); //souce , destination , auxilary
     return 0;
-}
-void toh(int n , char source , char dest , char aux)
-{
-    if(n==1)
-    {
-        printf("Move disk 1 from %c to %c\n",source,dest);
-        return;
-    }
-    toh(n-1,source,aux,dest);
-    printf("Move disk %d from %c to %c\n",n,source,dest);
-    toh(n-1,aux,dest,source);
 }
