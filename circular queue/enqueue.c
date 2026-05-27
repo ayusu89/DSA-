@@ -18,7 +18,7 @@ void enqueue (int data)
     }
     else 
     {
-        queue[rear]=data;
+        rear = (rear + 1)%max;
         printf("Enqueued element = %d \n",data);
         rear ++ ;
     }
