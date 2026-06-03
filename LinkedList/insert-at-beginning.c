@@ -10,7 +10,7 @@ struct node
 struct node *insert_at_beginning(struct node *head)
 {
     struct node *newnode;
-    int i;
+    
 
     newnode = (struct node *) malloc(sizeof(struct node));
 
