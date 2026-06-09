@@ -7,8 +7,9 @@ struct node
     struct node *next;
  };
 
-// Function name corrected with underscores instead of hyphens
-    struct node *insert_at_end(struct node *head) {
+// Function to insert at end
+    struct node *insert_at_end(struct node *head) 
+    {
     struct node *newnode, *temp;
 
     // Allocate memory for the new node
@@ -19,20 +20,22 @@ struct node
         return head;
      }
 
-    // Assign data and correctly set next to NULL
+    // Assigning the data to the new node 
     printf("Enter data: ");
     scanf("%d", &newnode->data);
-    newnode->next = NULL; // Fixed: Use '=' for assignment, not '=='
+    newnode->next = NULL; 
+    
 
-    // Case 1: The list is empty
+    // check if the list is empty
     if (head == NULL)
      {
         head = newnode;
      } 
-    // Case 2: The list already has nodes (traverse to find the end)
+   
     else 
     {
         temp = head;
+
         while (temp->next != NULL)
          {
             temp = temp->next; // Move to the next node
@@ -43,8 +46,8 @@ struct node
     return head;
 }
 
-// Simple function to print the list and verify the logic
-void print_list(struct node *head)
+// function to display
+void display (struct node *head)
  {
     struct node *temp = head;
      while (temp != NULL)
@@ -59,13 +62,13 @@ void print_list(struct node *head)
      {
     struct node *head = NULL;
 
-    // Insert 3 elements to test the end insertion
+    // Insert 3 elements at end
     head = insert_at_end(head);
     head = insert_at_end(head);
     head = insert_at_end(head);
 
     printf("Linked List content: ");
-    print_list(head);
+    display(head);
 
     return 0;
 }

@@ -38,6 +38,7 @@ int main()
 
     
        head = insert_at_beginning(head);
+       
        printf("Inserted value = %d\n", head->data);
 
 
