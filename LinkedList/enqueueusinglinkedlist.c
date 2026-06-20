@@ -42,7 +42,7 @@ void enqueue (int data )
 
 void dequeue ()
 {
-    if (front == NULL)
+    if (front == NULL && rear == NULL)
      {
         printf("Queue is empty.\n");
         return ;      // indicate failure
@@ -50,11 +50,6 @@ void dequeue ()
     struct node* temp = front;
     int data = temp->data;
     front = front->next;
-
-    if (front == NULL)
-     {
-        rear = NULL;  // important fix
-     }
 
     free(temp);
     printf("Dequeued: %d\n", data);
