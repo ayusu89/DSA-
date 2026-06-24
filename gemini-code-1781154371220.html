@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information Management System (DS Project)</title>
+    <style>
+        /* ==========================================
+           CSS STYLING (Responsive UI & Component Layout)
+           ========================================== */
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --success-color: #16a34a;
+            --danger-color: #dc2626;
+            --info-color: #0891b2;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 3rem;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            padding: 1rem 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar .logo {
+            font-weight: bold;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+        }
+
+        .navbar .nav-links button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            margin-left: 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.5rem 0.25rem;
+            transition: color 0.2s, border-bottom 0.2s;
+        }
+
+        .navbar .nav-links button:hover, .navbar .nav-links button.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        /* Container structures */
+        .container {
+            max-width: 700px;
+            margin: 2rem auto;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .container-wide {
+            max-width: 1100px;
+        }
+
+        /* Dynamic Page view management toggles */
+        .page-view {
+            display: none;
+        }
+        .page-view.active-view {
+            display: block;
+        }
+
+        h2 {
+            margin-bottom: 0.25rem;
+            color: #0f172a;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Form Components */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.65rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* Action Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.65rem 1.25rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-primary { background: var(--primary-color); color: white; width: 100%; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-success { background: var(--success-color); color: white; }
+        .btn-danger { background: var(--danger-color); color: white; }
+        .btn-info { background: var(--info-color); color: white; }
+
+        /* Structural Layout Tables */
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 0.85rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Status Messages alerts */
+        .message {
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .message.success { background-color: #dcfce7; color: #15803d; }
+        .message.error { background-color: #fee2e2; color: #b91c1c; }
+        .message.info { background-color: #ecfeff; color: #0e7490; }
+        .hidden { display: none; }
+
+        .divider {
+            border: 0;
+            height: 1px;
+            background: var(--border-color);
+            margin: 2.5rem 0;
+        }
+
+        /* Queue Visualizer Layout */
+        .queue-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .queue-visual {
+            display: flex;
+            align-items: center;
+            background: #f1f5f9;
+            padding: 2rem 1.5rem;
+            border-radius: 8px;
+            min-height: 120px;
+            overflow-x: auto;
+            gap: 25px;
+            margin-top: 0.5rem;
+            border: 1px dashed #cbd5e1;
+        }
+
+        .queue-node {
+            background: var(--card-bg);
+            border: 2px solid var(--info-color);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            text-align: center;
+            min-width: 140px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        /* Node pointer arrows indicators */
+        .queue-node:not(:last-child)::after {
+            content: "➔";
+            position: absolute;
+            right: -22px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .queue-node.front {
+            border-color: var(--success-color);
+            background-color: #f0fdf4;
+        }
+        .queue-node.front::before {
+            content: "FRONT (Next Out)";
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--success-color);
+            white-space: nowrap;
+        }
+
+        .queue-node.rear {
+            border-color: var(--primary-color);
+        }
+        .queue-node.rear::box {
+            content: "REAR";
+        }
+
+        .queue-empty-text {
+            color: var(--text-muted);
+            font-style: italic;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Student Management System</div>
+        <div class="nav-links">
+            <button id="nav-entry" class="active" onclick="switchPage('entry')">Data Entry Form</button>
+            <button id="nav-records" onclick="switchPage('records')">Database Records & Queue</button>
+        </div>
+    </nav>
+
+    <div id="page-entry" class="container page-view active-view">
+        <h2>Student Data Entry</h2>
+        <p class="subtitle">Concept demonstrated: <strong>Linked List</strong> (Appending Nodes to Head/Tail)</p>
+        
+        <div id="entry-message" class="message hidden"></div>
+
+        <form id="student-form" onsubmit="handleFormSubmit(event)">
+            <div class="form-group">
+                <label for="studentId">Student ID:</label>
+                <input type="text" id="studentId" required placeholder="e.g., STU101" pattern="^[a-zA-Z0-9\-]+$">
+            </div>
+
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" required placeholder="Alice Smith">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" required placeholder="alice@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" required placeholder="10-15 digit phone" pattern="[0-9]{10,15}">
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea id="address" required placeholder="Enter street, city, country..." rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add Record to Linked List</button>
+        </form>
+    </div>
+
+    <div id="page-records" class="container container-wide page-view">
+        
+        <section style="margin-bottom: 2rem;">
+            <h2>All Stored Records (Linked List Visualization)</h2>
+            <p class="subtitle">Concept demonstrated: <strong>Linked List Traversal</strong> (Looping through pointers sequentially)</p>
+            
+            <div id="table-container" class="table-responsive">
+                </div>
+        </section>
+
+        <hr class="divider">
+
+        <section>
+            <h2>Queue Processing System (FIFO Pipeline)</h2>
+            <p class="subtitle">Concepts demonstrated: <strong>Enqueue</strong> (Insert Rear), <strong>Dequeue</strong> (Remove Front), and <strong>Front/Peek</strong></p>
+
+            <div id="queue-message" class="message hidden"></div>
+
+            <div class="queue-controls">
+                <button onclick="handleEnqueueNext()" class="btn btn-success">Enqueue Next Record</button>
+                <button onclick="handleDequeue()" class="btn btn-danger">Dequeue (Process Front)</button>
+                <button onclick="handlePeek()" class="btn btn-info">View Front Element</button>
+            </div>
+
+            <h3>Visual Queue View:</h3>
+            <div id="queue-visual-container" class="queue-visual">
+                </div>
+        </section>
+    </div>
+
+    <script>
+        // --- 1. LINKED LIST DESIGN SCHEMATICS ---
+        class Node {
+            constructor(studentData) {
+                this.data = studentData; // Standard record object payload
+                this.next = null;        // Reference pointer link
+            }
+        }
+
+        class LinkedList {
+            constructor() {
+                this.head = null;
+            }
+
+            // Linked List Operation: Insert (Appends node to the absolute end of the chain)
+            insert(studentData) {
+                const newNode = new Node(studentData);
+                if (this.head === null) {
+                    this.head = newNode;
+                } else {
+                    let current = this.head;
+                    while (current.next !== null) {
+                        current = current.next; // TRAVERSAL: Stepping to the final current node
+                    }
+                    current.next = newNode;
+                }
+            }
+
+            // Linked List Operation: Traverse (Loops through elements to build a raw flat array layout)
+            toArray() {
+                const results = [];
+                let current = this.head;
+                while (current !== null) {
+                    results.push(current.data);
+                    current = current.next; // Linear traversal jump
+                }
+                return results;
+            }
+
+            // Populates structural memory state values using a flat JS array raw list
+            fromArray(array) {
+                this.head = null;
+                array.forEach(item => this.insert(item));
+            }
+        }
+
+        // --- 2. QUEUE DESIGN SCHEMATICS (First-In, First-Out) ---
+        class Queue {
+            constructor() {
+                this.items = [];
+            }
+
+            // Queue Operation: Enqueue (Adds element to the back/rear)
+            enqueue(element) {
+                this.items.push(element);
+            }
+
+            // Queue Operation: Dequeue (Removes and returns the element at the front)
+            dequeue() {
+                if (this.isEmpty()) return null;
+                return this.items.shift();
+            }
+
+            // Queue Operation: Front / Peek (Look at the first item without removal)
+            front() {
+                if (this.isEmpty()) return null;
+                return this.items[0];
+            }
+
+            isEmpty() {
+                return this.items.length === 0;
+            }
+
+            getItems() {
+                return this.items;
+            }
+        }
+
+        // --- GLOBAL APP STATES INSTANCES ---
+        const linkedListDB = new LinkedList();
+        const processingQueue = new Queue();
+
+        // --- LOCAL STORAGE HANDLING ---
+        function loadStorageData() {
+            const savedStudents = JSON.parse(localStorage.getItem('ll_students')) || [];
+            linkedListDB.fromArray(savedStudents);
+
+            const savedQueue = JSON.parse(localStorage.getItem('q_pipeline')) || [];
+            processingQueue.items = savedQueue;
+        }
+
+        function saveStorageData() {
+            localStorage.setItem('ll_students', JSON.stringify(linkedListDB.toArray()));
+            localStorage.setItem('q_pipeline', JSON.stringify(processingQueue.getItems()));
+        }
+
+        // --- PAGE ROUTING CONTROLLER NAVIGATION ---
+        function switchPage(pageName) {
+            // Un-assign previous views toggle bindings
+            document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active-view'));
+            document.querySelectorAll('.nav-links button').forEach(btn => btn.classList.remove('active'));
+
+            if (pageName === 'entry') {
+                document.getElementById('page-entry').classList.add('active-view');
+                document.getElementById('nav-entry').classList.add('active');
+            } else {
+                document.getElementById('page-records').classList.add('active-view');
+                document.getElementById('nav-records').classList.add('active');
+                // Refresh dynamically rendered visualization nodes elements blocks
+                renderRecordsTable();
+                renderQueueUI();
+            }
+        }
+
+        // --- EVENT HANDLER: FORM SUBMISSION (Linked List Insert) ---
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const studentData = {
+                id: document.getElementById('studentId').value.trim(),
+                name: document.getElementById('fullName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                address: document.getElementById('address').value.trim()
+            };
+
+            // Execute custom implementation assignment injection structure block
+            linkedListDB.insert(studentData);
+            saveStorageData();
+
+            displayAlert('entry-message', `Success! Node element generated for: ${studentData.name}`, 'success');
+            document.getElementById('student-form').reset();
+        }
+
+        // --- UI RENDERER: LINKED LIST TRAVERSAL GENERATOR TABLE ---
+        function renderRecordsTable() {
+            const container = document.getElementById('table-container');
+            const studentArray = linkedListDB.toArray(); // Calls the structural traversal code loop
+
+            // Handling empty data constraint exceptions states
+            if (studentArray.length === 0) {
+                container.innerHTML = `<div class="message info">Empty Database: No student nodes found inside the Linked List. Add elements using the input form first!</div>`;
+                return;
+            }
+
+            let htmlStr = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Full Name</th>
+                            <th>Email Address</th>
+                            <th>Phone Line</th>
+                            <th>Home Address</th>
+                            <th>Action Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            studentArray.forEach(student => {
+                htmlStr += `
+                    <tr>
+                        <td><strong>${student.id}</strong></td>
+                        <td>${student.name}</td>
+                        <td>${student.email}</td>
+                        <td>${student.phone}</td>
+                        <td>${student.address}</td>
+                        <td>
+                            <button onclick="enqueueSpecificRow('${student.id}')" class="btn btn-info" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; width: auto;">
+                                Enqueue Record
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            htmlStr += `</tbody></table>`;
+            container.innerHTML = htmlStr;
+        }
+
+        // --- UI RENDERER: QUEUE PIPELINE DATA VIEW MAPPER ---
+        function renderQueueUI() {
+            const container = document.getElementById('queue-visual-container');
+            const currentQueueList = processingQueue.getItems();
+
+            // Handling empty queue states
+            if (currentQueueList.length === 0) {
+                container.innerHTML = `<div class="queue-empty-text">Queue Pipeline is Empty (Underflow Condition). Enqueue records to view FIFO ordering.</div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            currentQueueList.forEach((item, idx) => {
+                const elementDiv = document.createElement('div');
+                // The condition checks if it's the front element to apply unique highlight styles
+                elementDiv.className = `queue-node ${idx === 0 ? 'front' : ''}`;
+                elementDiv.innerHTML = `
+                    <strong>${item.id}</strong><br>
+                    <small>${item.name}</small>
+                `;
+                container.appendChild(elementDiv);
+            });
+        }
+
+        // --- INTERACTIVE ACTIONS CONTROLLERS METHODS ---
+        
+        // Enqueue Next: Finds the first student record from the Linked List database that isn't currently in the queue
+        function handleEnqueueNext() {
+            const allRecords = linkedListDB.toArray();
+            const queueItems = processingQueue.getItems();
+
+            if (allRecords.length === 0) {
+                displayAlert('queue-message', 'Operation Stopped: The Linked List Database is empty. Create profiles first.', 'error');
+                return;
+            }
+
+            // Find a student object record that hasn't been added to the queue pipeline yet
+            const unqueuedItem = allRecords.find(rec => !queueItems.some(q => q.id === rec.id));
+
+            if (!unqueuedItem) {
+                displayAlert('queue-message', 'Information Notice: All elements inside the database are already queued.', 'info');
+                return;
+            }
+
+            processingQueue.enqueue(unqueuedItem);
+            saveStorageData();
+            renderQueueUI();
+            displayAlert('queue-message', `Enqueued Record successfully: ${unqueuedItem.name} at the REAR.`, 'success');
+        }
+
+        // Inline Row targeting Enqueue method
+        function enqueueSpecificRow(id) {
+            const allRecords = linkedListDB.toArray();
+            const targetStudent = allRecords.find(r => r.id === id);
+            const queueItems = processingQueue.getItems();
+
+            if (queueItems.some(q => q.id === id)) {
+                displayAlert('queue-message', 'Conflict Warning: Element already exists inside the active queue pipeline.', 'error');
+                return;
+            }
+
+            processingQueue.enqueue(targetStudent);
+            saveStorageData();
+            renderQueueUI();
+            displayAlert('queue-message', `Enqueued profile: ${targetStudent.name}`, 'success');
+        }
+
+        // Dequeue: Removes the element at the front of the queue
+        function handleDequeue() {
+            if (processingQueue.isEmpty()) {
+                displayAlert('queue-message', 'Queue Underflow: Cannot dequeue from an empty pipeline structure.', 'error');
+                return;
+            }
+
+            const removedElement = processingQueue.dequeue();
+            saveStorageData();
+            renderQueueUI();
+            displayAlert('queue-message', `Dequeued (Processed Front Element): ${removedElement.name}`, 'success');
+        }
+
+        // Peek/Front: Inspects the front element without altering the queue
+        function handlePeek() {
+            const frontElement = processingQueue.front();
+            if (!frontElement) {
+                displayAlert('queue-message', 'The active queue is empty. No elements at the FRONT pointer context.', 'info');
+                return;
+            }
+            displayAlert('queue-message', `FRONT Pointer Inspection: [ID: ${frontElement.id} | Name: ${frontElement.name}]`, 'info');
+        }
+
+        // Utility alert helper function
+        function displayAlert(containerId, contentMsg, layoutTheme) {
+            const targetDiv = document.getElementById(containerId);
+            targetDiv.innerText = contentMsg;
+            targetDiv.className = `message ${layoutTheme}`;
+            
+            // Clear message alert notifications asynchronously after 4 seconds
+            setTimeout(() => {
+                targetDiv.className = 'message hidden';
+            }, 4000);
+        }
+
+        // App Entry Initialization Event Listener
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStorageData();
+        });
+    </script>
+</body>
+</html>
