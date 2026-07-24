@@ -7,7 +7,7 @@ void toh (int n , char source , char dest , char aux )
         return ;
     }
     toh (n-1 , source , aux , dest);
-    printf("Move %d from %c to %c \n" ,n, source , dest);
+    printf("Move disk %d from %c to %c \n" ,n, source , dest);
 
     toh(n-1 , aux , dest , source );
 }
