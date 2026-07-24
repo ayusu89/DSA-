@@ -11,13 +11,13 @@ void towerOfHanoi(int n, char source, char destination, char auxiliary)
     }
 
     // Move n-1 disks from source to auxiliary
-    towerOfHanoi(n - 1, source, destination, auxiliary);
+    towerOfHanoi(n - 1, source, auxiliary, destination);
 
-    // Move the largest disk to destination
+    // Move the largest disk
     printf("Move disk %d from %c to %c\n", n, source, destination);
 
     // Move n-1 disks from auxiliary to destination
-    towerOfHanoi(n - 1, auxiliary, source, destination);
+    towerOfHanoi(n - 1, auxiliary, destination, source);
 }
 
 int main()
@@ -27,7 +27,7 @@ int main()
     printf("Enter the number of disks: ");
     scanf("%d", &n);
 
-    towerOfHanoi(n, 'A', 'B', 'C');
+    towerOfHanoi(n, 'A', 'C', 'B');
 
     return 0;
 }
