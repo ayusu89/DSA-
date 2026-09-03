@@ -24,16 +24,7 @@ struct node* deleteafterposition(struct node *head)
     printf("Enter the position to delete: "); 
     scanf("%d", &pos); 
  
-    // If the position is the first node 
-    if (pos == 1) 
-    { 
-        temp = head; 
-        head = head->next; // Move head to the next node 
-        free(temp); // Free the memory of the old head 
-        printf("Node at position 1 deleted.\n"); 
-        return head; 
-     } 
- 
+    
     temp = head; 
  
     // Traverse to the node just before the desired position 
