@@ -27,12 +27,8 @@ struct node *deletefrombeginning(struct node *head)
     // Move head to the second node
     head = head->next;
 
-    // If there is a second node,
-    // remove its backward link
-    if (head != NULL)
-    {
-        head->prev = NULL;
-    }
+    head->prev = NULL;
+    
 
     // Free the old first node
     free(temp);
@@ -45,8 +41,6 @@ struct node *deletefrombeginning(struct node *head)
 int main()
 {
     struct node *head = NULL;
-    struct node *newnode;
-    struct node *temp;
     // Delete from beginning
 
     head = deletefrombeginning(head);
