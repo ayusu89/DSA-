@@ -2,7 +2,7 @@
 #define max 5
 int top = -1;
 int stack [max];
-int push (int val)
+int push (int data)
 {
     if(top == max -1 )
     {
@@ -11,8 +11,8 @@ int push (int val)
     else
     {
         top = top +1;
-        stack [top] = val;
-        printf("%d pushed in the stack \n", val);
+        stack [top] = data;
+        printf("%d pushed in the stack \n", data);
     }
 }
 int main ()

@@ -10,11 +10,11 @@ int pop()
     }
     else
     {
-        int val = stack [top];
+        int data = stack [top];
 
         top = top -1 ;
         
-        printf("%d popped from the stack \n",val);
+        printf("%d popped from the stack \n",data);
     }
 }
 int main()
