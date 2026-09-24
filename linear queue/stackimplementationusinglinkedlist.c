@@ -10,15 +10,15 @@ struct node
 struct node *top = NULL;
 
 // Push
-void push(int data )
+void push(int data)
 {
     struct node *newnode;
+
     newnode = (struct node *)malloc(sizeof(struct node));
+
     newnode->data = data;
     newnode->next = top;
     top = newnode;
-
-    printf("%d pushed\n", data);
 }
 
 // Pop
@@ -33,7 +33,6 @@ void pop()
     }
 
     temp = top;
-    printf("%d popped\n", top->data);
     top = top->next;
     free(temp);
 }
@@ -62,11 +61,12 @@ int main()
     push(20);
     push(30);
 
+    printf("Stack before pop: ");
     display();
 
     pop();
 
-    printf("\nAfter pop:\n");
+    printf("\nStack after pop: ");
     display();
 
     return 0;
