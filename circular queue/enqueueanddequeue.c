@@ -6,44 +6,44 @@ int front = -1;
 int rear = -1;
 void enqueue (int data)
 {
-    if((rear + 1)% max == front)
+    if((rear + 1) % max == front)
     {
         printf("Queue is full \n");
     }
     else if (front == -1 && rear == -1)
     {
         front = rear = 0;
-        queue[rear]=data;
+        queue[rear] = data;
         printf("Enqueued element : %d \n",data);
     }
     else 
     {
         rear = (rear + 1) % max ;
-        queue[rear]=data;
+        queue[rear] = data;
         printf("Enqueued element = %d \n",data);
     }
 }
     void dequeue()
     {
 
-    if(front==-1 && rear == -1)
+    if(front == -1 && rear == -1)
 
     {
-        printf("Queue is empty\n");
+        printf("Queue is empty \n");
     }
         
     
       else if (front == rear)
     {
-        int data = queue[front];
+        int data = queue [front] ;
         printf("Dequeued element : %d \n",data);
         front = rear = -1;
     }
     else 
     {
          int data = queue [front];
-        printf("Dequeued element : %d \n",data);
-        front = (front +1 ) % max;
+        printf("Dequeued element : %d \n", data);
+        front = (front + 1 ) % max;
     }
 }
    
@@ -52,18 +52,18 @@ void enqueue (int data)
 
 int main()
 {
-    enqueue(10);
-    enqueue(20);
-    enqueue(30);
-    enqueue(40);
-    enqueue(50);
-    enqueue(60);
+    enqueue (10);
+    enqueue (20);
+    enqueue (30);
+    enqueue (40);
+    enqueue (50);
+    enqueue (60);
 
-    dequeue();
-    dequeue();
-    dequeue();
-    dequeue();
-    dequeue();
-    dequeue();
+    dequeue ();
+    dequeue ();
+    dequeue ();
+    dequeue ();
+    dequeue ();
+    dequeue ();
     return 0;
 }
