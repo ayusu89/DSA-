@@ -1,4 +1,4 @@
-#include<stdio.h>
+sta#include<stdio.h>
 #define max 5
 int data;
 int queue [max];
