@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -8,17 +9,16 @@ struct node
 };
 
 struct node *top = NULL;
+struct node *newnode ; 
 
 // Push
 void push(int data)
 {
-    struct node *newnode;
-
-    newnode = (struct node *)malloc(sizeof(struct node));
-
-    newnode->data = data;
-    newnode->next = top;
-    top = newnode;
+    struct node *newnode ;
+    newnode  = (struct node *) malloc (sizeof(struct node));
+    newnode ->data = data ;
+    newnode ->next = top;
+    top = newnode ;
 }
 
 // Pop
@@ -42,12 +42,6 @@ void display()
 {
     struct node *temp = top;
 
-    if (top == NULL)
-    {
-        printf("Stack is empty\n");
-        return;
-    }
-
     while (temp != NULL)
     {
         printf("%d ", temp->data);
@@ -61,12 +55,12 @@ int main()
     push(20);
     push(30);
 
-    printf("Stack before pop: ");
+    printf("Before pop: ");
     display();
 
     pop();
 
-    printf("\nStack after pop: ");
+    printf("\nAfter pop: ");
     display();
 
     return 0;
