@@ -14,7 +14,8 @@ struct node* create()
     printf("Enter number of nodes: ");
     scanf("%d", &n);
 
-    for(i = 0; i < n; i++) {
+    for(i = 0; i < n; i++)
+     {
         newnode = (struct node*)malloc(sizeof(struct node));
 
         printf("Enter data: ");
@@ -22,11 +23,13 @@ struct node* create()
 
         newnode->next = NULL;
 
-        if(head == NULL) {
+        if(head == NULL) 
+        {
             head = newnode;
             tail = newnode;
         }
-        else {
+        else 
+        {
             tail->next = newnode;
             tail = newnode;
         }
